@@ -348,7 +348,7 @@ class TrainValDataset(Dataset):
                 assert (
                     self.class_names
                 ), "Class names is required when converting labels to coco format for evaluating."
-                save_dir = osp.join(osp.dirname(osp.dirname(img_dir)), "annotations")
+                save_dir = osp.join(osp.dirname("/kaggle/working/", "annotations")
                 if not osp.exists(save_dir):
                     os.mkdir(save_dir)
                 save_path = osp.join(
