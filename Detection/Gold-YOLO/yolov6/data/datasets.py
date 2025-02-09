@@ -271,9 +271,7 @@ class TrainValDataset(Dataset):
         # check and load anns
         base_dir = osp.basename(img_dir)
         if base_dir != "":
-            label_dir = osp.join(
-            osp.dirname(osp.dirname(img_dir)), "labels", osp.basename(img_dir)
-            )
+            label_dir = osp.join(osp.dirname(img_dir), "labels")
             assert osp.exists(label_dir), f"{label_dir} is an invalid directory path!"
         else:
             sub_dirs= []
