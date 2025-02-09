@@ -219,7 +219,7 @@ class TrainValDataset(Dataset):
 
         assert osp.exists(img_dir), f"{img_dir} is an invalid directory path!"
         valid_img_record = osp.join(
-            osp.abspath("."), "." + osp.basename(img_dir) + ".json"
+            "/kaggle/working/", "." + osp.basename(img_dir) + ".json"
         )
         NUM_THREADS = min(8, os.cpu_count())
 
