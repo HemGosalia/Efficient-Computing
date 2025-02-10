@@ -252,19 +252,25 @@ class Evaler:
             return self.pr_metric_result
         LOGGER.info(f'\nEvaluating mAP by pycocotools.')
         if task != 'speed' and len(pred_results):
-            if 'anno_path' in self.data:
+            if 'anno_path' in self.data and os.path.exists(self.data['anno_path']):
                 anno_json = self.data['anno_path']
             else:
                 # generated coco format labels in dataset initialization
                 task = 'val' if task == 'train' else task
-                dataset_root = os.path.dirname(os.path.dirname(self.data[task]))
+                dataset_root = "/kaggle/working/"
+                os.makedirs(os.path.join(dataset_root, "annotations"), exist_ok=True)
                 base_name = os.path.basename(self.data[task])
                 anno_json = os.path.join(dataset_root, 'annotations', f'instances_{base_name}.json')
             pred_json = os.path.join(self.save_dir, "predictions.json")
             LOGGER.info(f'Saving {pred_json}...')
             with open(pred_json, 'w') as f:
                 json.dump(pred_results, f)
-            
+
+            # Check if the annotation file exists before proceeding
+            if not os.path.exists(anno_json):
+                LOGGER.error(f"❌ COCO annotation file not found: {anno_json}. Ensure dataset conversion is complete.")
+                return (0.0, 0.0)  # Return default mAP values if annotations are missing
+                
             anno = COCO(anno_json)
             pred = anno.loadRes(pred_json)
             cocoEval = COCOeval(anno, pred, 'bbox')
